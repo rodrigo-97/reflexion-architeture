@@ -19,21 +19,12 @@ public class ReflectionTable {
         ArrayList<String> fields = new ArrayList<>();
 
         for(Field field: table.getClass().getDeclaredFields()){
-<<<<<<< HEAD
             String fieldName = field.getDeclaredAnnotation(FieldTable.class).columnName();
 
             //if is not pk or fk
             boolean isKey =
                             field.getDeclaredAnnotation(FieldTable.class).isPk() ||
                             field.getDeclaredAnnotation(FieldTable.class).isFk();
-=======
-            String fieldName = field.getDeclaredAnnotation(annotations.FieldTable.class).columnName();
-
-            //if is not pk or fk
-            boolean isKey =
-                            field.getDeclaredAnnotation(annotations.FieldTable.class).isPk() ||
-                            field.getDeclaredAnnotation(annotations.FieldTable.class).isFk();
->>>>>>> origin/master
 
             if(!isKey){
                 fields.add(fieldName);
@@ -46,13 +37,8 @@ public class ReflectionTable {
         ArrayList<String> pks = new ArrayList<>();
 
         for(Field field: table.getClass().getDeclaredFields()){
-<<<<<<< HEAD
             boolean isPk = field.getDeclaredAnnotation(FieldTable.class).isPk();
             String fieldName = field.getDeclaredAnnotation(FieldTable.class).columnName();
-=======
-            boolean isPk = field.getDeclaredAnnotation(annotations.FieldTable.class).isPk();
-            String fieldName = field.getDeclaredAnnotation(annotations.FieldTable.class).columnName();
->>>>>>> origin/master
             if (isPk){
                 pks.add(fieldName);
             }
@@ -64,13 +50,9 @@ public class ReflectionTable {
         ArrayList<String> fks = new ArrayList<>();
 
         for(Field field: table.getClass().getDeclaredFields()){
-<<<<<<< HEAD
             boolean isPk = field.getDeclaredAnnotation(FieldTable.class).isFk();
             String fieldName = field.getDeclaredAnnotation(FieldTable.class).columnName();
-=======
-            boolean isPk = field.getDeclaredAnnotation(annotations.FieldTable.class).isFk();
-            String fieldName = field.getDeclaredAnnotation(annotations.FieldTable.class).columnName();
->>>>>>> origin/master
+
             if (isPk){
                 fks.add(fieldName);
             }
