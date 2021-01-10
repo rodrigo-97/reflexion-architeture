@@ -63,4 +63,8 @@ public class Anime extends TableData{
     public ArrayList<String> getFks() {
         return ReflectionTable.getFks(this);
     }
+
+    public void generateTable (){
+        ReflectionTable.generateSql();
+    }
 }
