@@ -1,4 +1,4 @@
-package Resource;
+package resource;
 
 public abstract class CrudMethods {
     public abstract String getALl ();

@@ -1,4 +1,4 @@
-package Resource;
+package resource;
 
 import annotations.Methods;
 import controllers.CharacterController;
