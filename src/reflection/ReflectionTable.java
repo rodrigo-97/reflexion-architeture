@@ -1,5 +1,4 @@
 package reflection;
-
 import annotations.FieldTable;
 import annotations.Table;
 
@@ -22,8 +21,7 @@ public class ReflectionTable {
             String fieldName = field.getDeclaredAnnotation(FieldTable.class).columnName();
 
             //if is not pk or fk
-            boolean isKey =
-                            field.getDeclaredAnnotation(FieldTable.class).isPk() ||
+            boolean isKey = field.getDeclaredAnnotation(FieldTable.class).isPk() ||
                             field.getDeclaredAnnotation(FieldTable.class).isFk();
 
             if(!isKey){
@@ -32,7 +30,6 @@ public class ReflectionTable {
         }
         return fields;
     }
-
     public static  ArrayList<String> getPks (Object table){
         ArrayList<String> pks = new ArrayList<>();
 
@@ -52,16 +49,14 @@ public class ReflectionTable {
         for(Field field: table.getClass().getDeclaredFields()){
             boolean isPk = field.getDeclaredAnnotation(FieldTable.class).isFk();
             String fieldName = field.getDeclaredAnnotation(FieldTable.class).columnName();
-
-            if (isPk){
+             if (isPk){
                 fks.add(fieldName);
             }
         }
         return fks;
     }
 
-    public static String generateSql (){
-        return null;
-    }
+    public static void generateSql (){
 
+    }
 }
