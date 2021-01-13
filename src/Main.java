@@ -1,3 +1,4 @@
+import DAO.SQLGenerator;
 import controllers.AnimeController;
 import models.Anime;
 import models.Character;
@@ -7,6 +8,7 @@ public class Main {
         Anime anime = new Anime();
         Character character = new Character();
         AnimeController animeController = new AnimeController();
+        SQLGenerator sqlGenerator = new SQLGenerator(anime);
 
         System.out.println("--- Anime data ---");
         System.out.println(anime.getTableName());
@@ -22,5 +24,6 @@ public class Main {
         System.out.println(character.getFks());
 
         System.out.println(animeController.getAll());
+        System.out.println(sqlGenerator.selectStatement());
     }
 }
