@@ -8,8 +8,11 @@ public class SQLGenerator {
     private List<String> atributesNames =  new ArrayList();
     private List<Object>  atributesValues = new ArrayList();
 
+
+
     public SQLGenerator(){
 
     }
+
 
 }
