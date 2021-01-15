@@ -6,7 +6,7 @@ import reflection.ResourceReflection;
 @Controller(name = "anime") // O nome deve ser o mesmo nome da anotation @Table
 public class AnimeController {
     public String getAll (){
-        return ResourceReflection.get(this);
+        return null;
     }
 
     public String getById (Integer id){

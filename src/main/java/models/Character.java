@@ -21,8 +21,10 @@ public class Character extends TableData{
     @FieldTable(columnName = "anime_id", isRequired = true, isFk = true)
     private Integer animeId;
 
-
     /* Methods */
+    public Character() {
+    }
+
     public Integer getId() {
         return id;
     }
@@ -74,4 +76,10 @@ public class Character extends TableData{
     public ArrayList<String> getFks() {
         return ReflectionTable.getFks(this);
     }
+
+    @Override
+    public ArrayList<String> getTypeFields() {
+        return ReflectionTable.getTypeFields(this);
+    }
 }
+

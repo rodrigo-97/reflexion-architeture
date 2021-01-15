@@ -1,10 +1,9 @@
 package resource;
 
-import annotations.Methods;
-import com.google.gson.Gson;
 import controllers.AnimeController;
 import models.Anime;
-import javax.servlet.ServletException;
+import com.google.gson.Gson;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,51 +16,51 @@ import java.io.PrintWriter;
 public class AnimeResource extends HttpServlet {
     private AnimeController animeController = new AnimeController();
 
-    @Methods.Get(path = "/animes", type = "all")
     public String getALl() {
         return animeController.getAll();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        // find animes
+        // animeController.findAll();
 
-        Anime anime = new Anime();
-        anime.setId(1);
-        anime.setName("attack on titan");
-        anime.setNumEpisodes(12);
+        try {
+            // check if id were passed in URI path
+            String requestParam;
+            String responseContent;
+            requestParam = request.getParameter("id");
+            if(requestParam == null){
+                // find all anime data
+                //responseContent = "Não há nada aqui";
+            }else {
+                // find anime by pk
+                //responseContent = "Há algo aqui " + requestParam;
+            }
 
-        Gson re = new Gson();
+            Anime anime = new Anime();
+            anime.setId(1);
+            anime.setName("attack on titan");
+            anime.setNumEpisodes(12);
 
+             //transform into JSON string
+            Gson gson = new Gson();
+            responseContent = gson.toJson(anime);
 
-        String res = re.toJson(anime);
+            // set headers and return response
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.println(responseContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        response.setContentType("Application/Json");
-        PrintWriter out = response.getWriter();
-
-
-        String json = "{\"name\": \"rodrigo\", idade: {}}";
-
-
-        out.println(res);
     }
 
-    @Methods.Get(path = "/anime/:id", type = "id")
-    public String getById() {
-        return animeController.getById(1);
-    }
+    protected void doPost (HttpServletRequest request, HttpServletResponse response) {
+        try {
 
-    @Methods.Post(path = "/anime")
-    public String insert() {
-        return animeController.insert(new Object());
-    }
+        }catch (Exception exception){
 
-    @Methods.Put(path = "/anime")
-    public String update() {
-        return animeController.update(new Object());
-    }
-
-    @Methods.Delete(path = "/anime/:id")
-    public String delete() {
-        return animeController.delete(2);
+        }
     }
 }
