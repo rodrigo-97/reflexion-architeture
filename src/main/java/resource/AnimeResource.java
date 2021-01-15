@@ -53,7 +53,6 @@ public class AnimeResource extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     protected void doPost (HttpServletRequest request, HttpServletResponse response) {
