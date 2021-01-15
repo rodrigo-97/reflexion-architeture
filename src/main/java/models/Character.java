@@ -9,16 +9,16 @@ import java.util.ArrayList;
 @Table(name = "character")
 public class Character extends TableData{
 
-    @FieldTable(columnName = "id", isPk = true, isRequired = true)
+    @FieldTable(columnName = "id", isPk = true)
     private Integer id;
 
-    @FieldTable(columnName = "name", isRequired = true)
+    @FieldTable(columnName = "name")
     private String name;
 
     @FieldTable(columnName = "age")
     private Integer age;
 
-    @FieldTable(columnName = "anime_id", isRequired = true, isFk = true)
+    @FieldTable(columnName = "anime_id", isFk = true)
     private Integer animeId;
 
     /* Methods */
@@ -80,6 +80,12 @@ public class Character extends TableData{
     @Override
     public ArrayList<String> getTypeFields() {
         return ReflectionTable.getTypeFields(this);
+    }
+
+    @Override
+    public String toString() {
+        com.google.gson.Gson gson = new com.google.gson.Gson();
+        return gson.toJson(this);
     }
 }
 

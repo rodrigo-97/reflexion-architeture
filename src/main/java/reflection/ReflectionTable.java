@@ -1,6 +1,7 @@
 package reflection;
 import annotations.FieldTable;
 import annotations.Table;
+import models.Anime;
 import utils.StringUtils;
 
 import java.lang.reflect.Field;
@@ -90,7 +91,7 @@ public class ReflectionTable {
     }
 
     /*
-     ** This part will get the value of attributes from table [pk, fk, normal attribute]
+     ** This part will set the value of attributes from table [pk, fk, normal attribute]
      */
     public static void setValueField(Object table, String attributeName, Object attributeValue) {
         String methodName = "set" + StringUtils.getFirstCharacter(attributeName);
@@ -102,5 +103,27 @@ public class ReflectionTable {
         } catch (NoSuchMethodException | NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    /*
+     ** This part will get the value of attributes from table [pk, fk, normal attribute]
+     */
+    public static void getValueField(Object table, String attributeName) {
+        String methodName = "get" + StringUtils.getFirstCharacter(attributeName);
+
+        try {
+            Method method = table.getClass().getMethod(methodName);
+            method.invoke(table);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        Anime anime = new Anime();
+        anime.setName("Attack on Titan");
+
+        getValueField(anime, "name");
+        System.out.println(anime.toString());
     }
 }

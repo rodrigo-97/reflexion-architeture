@@ -32,7 +32,9 @@ public class Main {
         System.out.println(animeController.getAll());
         System.out.println(sqlGenerator.selectStatement());
 
-        ReflectionTable.setValueField(anime, "name", "AAAAAAAAAAAAAAAAAAAAA");
+        ReflectionTable.setValueField(anime, "name", "Attack on Titan");
+        ReflectionTable.setValueField(character, "name", "BBBBBBBBBBBBBBBBBBBb");
         System.out.println(anime.getName());
+        System.out.println(character.getName());
     }
 }

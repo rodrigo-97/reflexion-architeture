@@ -1,5 +1,6 @@
 package models;
 
+import com.google.gson.Gson;
 import reflection.ReflectionTable;
 import annotations.FieldTable;
 import annotations.Table;
@@ -9,13 +10,13 @@ import java.util.ArrayList;
 @Table(name = "anime")
 public class Anime extends TableData{
 
-    @FieldTable(columnName = "id", isPk = true, isRequired = true)
+    @FieldTable(columnName = "id", isPk = true)
     private Integer id;
 
-    @FieldTable(columnName = "name", isRequired = true)
+    @FieldTable(columnName = "name")
     private String name;
 
-    @FieldTable(columnName = "num_episodes", isRequired = true)
+    @FieldTable(columnName = "num_episodes")
     private Integer numEpisodes;
 
 
@@ -70,5 +71,11 @@ public class Anime extends TableData{
     @Override
     public ArrayList<String> getTypeFields() {
         return ReflectionTable.getTypeFields(this);
+    }
+
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }
