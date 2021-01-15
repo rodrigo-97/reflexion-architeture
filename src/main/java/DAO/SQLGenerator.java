@@ -52,7 +52,7 @@ public class SQLGenerator {
             fieldName = StringUtils.removeUnderscore(fieldName);
             fieldValues.add(ReflectionTable.getFieldValue(tableData, fieldName));
         }
-
+        //@TODO implementar metodo de conversão de valores para inserção.
         return "INSERT INTO "+tableData.getTableName() + " " + this.colunsSixtaxe(fieldNames) +" values ( "+ fieldValues+ ")";
     }
 //
