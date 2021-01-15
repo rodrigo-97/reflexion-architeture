@@ -20,6 +20,9 @@ public class Anime extends TableData{
 
 
     /* Methods */
+    public Anime() {
+    }
+
     public Integer getId() {
         return id;
     }
@@ -64,7 +67,8 @@ public class Anime extends TableData{
         return ReflectionTable.getFks(this);
     }
 
-    public void generateTable (){
-        ReflectionTable.generateSql();
+    @Override
+    public ArrayList<String> getTypeFields() {
+        return ReflectionTable.getTypeFields(this);
     }
 }

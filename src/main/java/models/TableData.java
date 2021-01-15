@@ -7,4 +7,5 @@ public abstract class TableData {
     public abstract ArrayList<String> getFields();
     public abstract ArrayList<String> getPks();
     public abstract ArrayList<String> getFks();
+    public abstract ArrayList<String> getTypeFields();
 }

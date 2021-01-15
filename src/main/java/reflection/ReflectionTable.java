@@ -1,11 +1,15 @@
 package reflection;
 import annotations.FieldTable;
 import annotations.Table;
+import utils.StringUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class ReflectionTable {
+
     public static String getTableName (Object table) {
         if (table.getClass().isAnnotationPresent(Table.class)){
             return table.getClass().getDeclaredAnnotation(Table.class).name();
@@ -14,6 +18,9 @@ public class ReflectionTable {
         }
     }
 
+    /*
+     ** This part will get all attributes from table [pk, fk, normal attribute]
+     */
     public static ArrayList<String> getFields (Object table) {
         ArrayList<String> fields = new ArrayList<>();
 
@@ -21,23 +28,28 @@ public class ReflectionTable {
             String fieldName = field.getDeclaredAnnotation(FieldTable.class).columnName();
 
             //if is not pk or fk
-            boolean isKey = field.getDeclaredAnnotation(FieldTable.class).isPk() ||
-                            field.getDeclaredAnnotation(FieldTable.class).isFk();
+            if (field.isAnnotationPresent(FieldTable.class)){
+                boolean isKey = field.getDeclaredAnnotation(FieldTable.class).isPk() ||
+                        field.getDeclaredAnnotation(FieldTable.class).isFk();
 
-            if(!isKey){
-                fields.add(fieldName);
+                if(!isKey){
+                    fields.add(fieldName);
+                }
             }
         }
         return fields;
     }
+
     public static  ArrayList<String> getPks (Object table){
         ArrayList<String> pks = new ArrayList<>();
 
         for(Field field: table.getClass().getDeclaredFields()){
-            boolean isPk = field.getDeclaredAnnotation(FieldTable.class).isPk();
-            String fieldName = field.getDeclaredAnnotation(FieldTable.class).columnName();
-            if (isPk){
-                pks.add(fieldName);
+            if (field.isAnnotationPresent(FieldTable.class)){
+                boolean isPk = field.getDeclaredAnnotation(FieldTable.class).isPk();
+                String fieldName = field.getDeclaredAnnotation(FieldTable.class).columnName();
+                if (isPk){
+                    pks.add(fieldName);
+                }
             }
         }
         return pks;
@@ -47,16 +59,48 @@ public class ReflectionTable {
         ArrayList<String> fks = new ArrayList<>();
 
         for(Field field: table.getClass().getDeclaredFields()){
-            boolean isPk = field.getDeclaredAnnotation(FieldTable.class).isFk();
-            String fieldName = field.getDeclaredAnnotation(FieldTable.class).columnName();
-             if (isPk){
-                fks.add(fieldName);
+            if (field.isAnnotationPresent(FieldTable.class)){
+                boolean isPk = field.getDeclaredAnnotation(FieldTable.class).isFk();
+                String fieldName = field.getDeclaredAnnotation(FieldTable.class).columnName();
+                if (isPk){
+                    fks.add(fieldName);
+                }
             }
         }
         return fks;
     }
 
-    public static void generateSql (){
+    /*
+    ** This part will get the type of attributes from table [pk, fk, normal attribute]
+     */
+    public static ArrayList<String> getTypeFields (Object table) {
+        ArrayList<String> typeFields = new ArrayList<>();
 
+        for(Field field: table.getClass().getDeclaredFields()){
+            //if is not pk or fk
+            if (field.isAnnotationPresent(FieldTable.class)){
+                if (field.getType().equals(String.class)){
+                    typeFields.add("VARCHAR(256)");
+                }else if (field.getType().equals(Integer.class)){
+                    typeFields.add("INTEGER");
+                }
+            }
+        }
+        return typeFields;
+    }
+
+    /*
+     ** This part will get the value of attributes from table [pk, fk, normal attribute]
+     */
+    public static void setValueField(Object table, String attributeName, Object attributeValue) {
+        String methodName = "set" + StringUtils.getFirstCharacter(attributeName);
+
+        try {
+            Field field = table.getClass().getDeclaredField(attributeName);
+            Method method = table.getClass().getMethod(methodName, new Class[]{field.getType()});
+            method.invoke(table, attributeValue);
+        } catch (NoSuchMethodException | NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 }
