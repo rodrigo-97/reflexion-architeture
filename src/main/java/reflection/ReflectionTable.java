@@ -108,22 +108,23 @@ public class ReflectionTable {
     /*
      ** This part will get the value of attributes from table [pk, fk, normal attribute]
      */
-    public static void getValueField(Object table, String attributeName) {
+    public static Object getFieldValue(Object table, String attributeName) {
         String methodName = "get" + StringUtils.getFirstCharacter(attributeName);
-
+        Object object =  new Object();
         try {
             Method method = table.getClass().getMethod(methodName);
-            method.invoke(table);
+            object = method.invoke(table);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+        return  object;
     }
 
     public static void main(String[] args) {
         Anime anime = new Anime();
         anime.setName("Attack on Titan");
 
-        getValueField(anime, "name");
+        getFieldValue(anime, "name");
         System.out.println(anime.toString());
     }
 }

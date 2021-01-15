@@ -3,9 +3,12 @@ package DAO;
 import annotations.Table;
 import models.TableData;
 import reflection.ReflectionTable;
+import utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SQLGenerator {
     private String tableName;
@@ -42,10 +45,15 @@ public class SQLGenerator {
 
     public String insertStatement(){
         List<String> fieldNames =  this.tableData.getFields();
+        List<Object> fieldValues =  new ArrayList<>();
+        HashMap<String,Object> fiedAnValue= new HashMap<>();
+
         for(String fieldName: fieldNames){
-            ReflectionTable.(tab,fieldName);
+            fieldName = StringUtils.removeUnderscore(fieldName);
+            fieldValues.add(ReflectionTable.getFieldValue(tableData, fieldName));
         }
-        return null;
+
+        return "INSERT INTO "+tableData.getTableName() + " " + this.colunsSixtaxe(fieldNames) +" values ( "+ fieldValues+ ")";
     }
 //
 //    private String whereSintaxe() {
@@ -63,12 +71,12 @@ public class SQLGenerator {
 
     private String colunsSixtaxe(List<String> fields){
         //Alinha o nome dos campos da Sql. (coluna1, coluna2,)
-        String columns = "";
+        String columns = "(";
         if(!this.needPk()) {
             fields.remove(fields.indexOf(this.pkNames.get(0)));
         }
         columns+= String.join(",",fields);
-        return 	columns;
+        return 	columns+")";
     }
 
     private String updateSintaxe(List<String> fields, List<Object> values) {
