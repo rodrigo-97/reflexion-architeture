@@ -2,15 +2,17 @@ package DAO;
 
 import annotations.Table;
 import models.TableData;
+import reflection.ReflectionTable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SQLGenerator {
     private String tableName;
-    private List<String> pkNames =new ArrayList<>();
+    private List<String> pkNames = new ArrayList<>();
     private List<String> atributesNames =  new ArrayList();
     private List<Object>  atributesValues = new ArrayList();
+    private TableData tableData;
 
 
 
@@ -18,10 +20,15 @@ public class SQLGenerator {
         this.tableName = tab.getTableName();
         this.atributesNames = tab.getFields();
         this.pkNames = tab.getPks();
+        this.tableData  = tab;
         // this.atributesValues = tab.
     }
 
     public String  selectStatement(){
+        return "SELECT "+this.colunsSixtaxe(this.atributesNames)+" FROM "+this.tableName;
+    }
+
+    public String  selectStatement(List<String> params){
         return "SELECT "+this.colunsSixtaxe(this.atributesNames)+" FROM "+this.tableName;
     }
 
@@ -34,6 +41,10 @@ public class SQLGenerator {
     }
 
     public String insertStatement(){
+        List<String> fieldNames =  this.tableData.getFields();
+        for(String fieldName: fieldNames){
+            ReflectionTable.(tab,fieldName);
+        }
         return null;
     }
 //
