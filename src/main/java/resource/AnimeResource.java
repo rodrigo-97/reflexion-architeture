@@ -3,22 +3,22 @@ package resource;
 import controllers.AnimeController;
 import models.Anime;
 import com.google.gson.Gson;
+import reflection.ReflectionTable;
+import utils.Response;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 
 @WebServlet(name = "anime", value = "/animes")
 public class AnimeResource extends HttpServlet {
     private AnimeController animeController = new AnimeController();
-
-    public String getALl() {
-        return animeController.getAll();
-    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         // find animes
@@ -49,17 +49,45 @@ public class AnimeResource extends HttpServlet {
             // set headers and return response
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
+
+
             out.println(responseContent);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     protected void doPost (HttpServletRequest request, HttpServletResponse response) {
+
+        response.setContentType("application/json");
+        Anime anime = new Anime();
+        ReflectionTable.setValueField(anime, "name", request.getParameter("name"));
+        ReflectionTable.setValueField(anime, "numEpisodes", Integer.parseInt(request.getParameter("numEpisodes")));
+
+        System.out.println(anime);
         try {
-
-        }catch (Exception exception){
-
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.println(new Gson().toJson(new Response("Deu tudo certo")));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        Anime anime = new Anime();
+        ReflectionTable.setValueField(anime, "id", Integer.parseInt(request.getParameter("id")));
+        ReflectionTable.setValueField(anime, "name", request.getParameter("name"));
+        ReflectionTable.setValueField(anime, "numEpisodes", Integer.parseInt(request.getParameter("numEpisodes")));
+
+        System.out.println(anime);
+
+    }
+
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        System.out.println(request.getParameter("id"));
     }
 }

@@ -19,7 +19,6 @@ public class Anime extends TableData{
     @FieldTable(columnName = "num_episodes")
     private Integer numEpisodes;
 
-
     /* Methods */
     public Anime() {
     }
