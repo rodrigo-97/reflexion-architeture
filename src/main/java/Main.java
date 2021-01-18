@@ -1,15 +1,21 @@
+import DAO.PersistData;
 import DAO.SQLGenerator;
 import controllers.AnimeController;
 import models.Anime;
 import models.Character;
+import models.TableData;
 import reflection.ReflectionTable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.SplittableRandom;
 
 public class Main {
     public static void main(String[] args) {
         Anime anime = new Anime();
         Character character = new Character();
         AnimeController animeController = new AnimeController();
-        SQLGenerator sqlGenerator = new SQLGenerator(anime);
 
         anime.setNumEpisodes(23);
         anime.setName("alalala");
@@ -26,15 +32,21 @@ public class Main {
         System.out.println(character.getTableName());
         System.out.println(character.getFields());
         System.out.println(character.getPks());
+
         System.out.println(character.getFks());
         System.out.println(character.getTypeFields());
 
         System.out.println(animeController.getAll());
-        System.out.println(sqlGenerator.insertStatement());
 
-        ReflectionTable.setValueField(anime, "name", "Attack on Titan");
-        ReflectionTable.setValueField(character, "name", "BBBBBBBBBBBBBBBBBBBb");
-        System.out.println(anime.getName());
-        System.out.println(character.getName());
+        System.out.println(ReflectionTable.getFieldValue(anime,"name"));
+
+        PersistData psd = null;
+        ReflectionTable.setValueField(anime,"name","");
+        ReflectionTable.setValueField(anime,"numEpisodes",null);
+        Anime anime2 = new Anime();
+        psd = new PersistData(anime2);
+
+        List<TableData> animes =  psd.getData();
+        System.out.println(animes.get(0).toString());
     }
 }

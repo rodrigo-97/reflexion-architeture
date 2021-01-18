@@ -30,6 +30,7 @@ public class AnimeResource extends HttpServlet {
             String responseContent;
             requestParam = request.getParameter("id");
             if(requestParam == null){
+
                 // find all anime data
                 //responseContent = "Não há nada aqui";
             }else {
