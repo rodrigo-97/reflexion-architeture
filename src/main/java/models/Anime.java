@@ -75,6 +75,7 @@ public class Anime extends TableData{
     @Override
     public String toString() {
         Gson gson = new Gson();
-        return gson.toJson(this);
+        String response = "{anime: " + new Gson().toJson(this) + "}";
+        return (response);
     }
 }

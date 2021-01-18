@@ -43,7 +43,7 @@ public class SQLGenerator {
     public String insertStatement(){
         List<String> fieldNames =  this.tableData.getFields();
         for(String fieldName: fieldNames){
-            ReflectionTable.(tab,fieldName);
+            //ReflectionTable.(tab,fieldName);
         }
         return null;
     }
