@@ -44,8 +44,21 @@ public class PersistData {
     }
 
     public boolean insert(){
+        String sql = this.sqlGenerator.insertStatement();
+        boolean isSuccess = false ;
+        List<TableData> tablesData = new ArrayList<>();
+        try {
+            pst = con.prepareStatement(sql);
+            pst = this.statementFill(pst,this.sqlGenerator.generateHashMap());
+            System.out.println(pst);
+            if(pst.executeUpdate() >= 1){
+                isSuccess = true ;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
 
-        return false;
+        return isSuccess;
     }
 
     private PreparedStatement statementFill(PreparedStatement pst, HashMap<String,Object> data){
