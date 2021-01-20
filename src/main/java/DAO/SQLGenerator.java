@@ -33,8 +33,16 @@ public class SQLGenerator {
             if(ReflectionTable.getFieldValue(this.tableData,name) != null && ReflectionTable.getFieldValue(this.tableData,name) != "")
             this.nameValue.put(name,ReflectionTable.getFieldValue(this.tableData,name));
         }
+
+        for(String name: this.pkNames){
+            Object value = ReflectionTable.getFieldValue(this.tableData,name);
+            if(ReflectionTable.getFieldValue(this.tableData,name) != null && ReflectionTable.getFieldValue(this.tableData,name) != "")
+                this.nameValue.put(name,ReflectionTable.getFieldValue(this.tableData,name));
+        }
+
         return  this.nameValue;
     }
+
     public HashMap<String,Object> generateHashMap(boolean ignoreNullValues){
         Integer index = 0;
 
