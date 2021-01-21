@@ -10,8 +10,8 @@ import java.util.ArrayList;
 @Table(name = "anime")
 public class Anime extends TableData{
 
-    @FieldTable(columnName = "id", isPk = true)
-    private Integer id;
+    @FieldTable(columnName = "id")
+    private String id;
 
     @FieldTable(columnName = "name")
     private String name;
@@ -21,7 +21,15 @@ public class Anime extends TableData{
 
     /* Methods */
 
-    public Anime(Integer id, String name, Integer numEpisodes) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Anime(String id, String name, Integer numEpisodes) {
         this.id = id;
         this.name = name;
         this.numEpisodes = numEpisodes;
@@ -30,13 +38,7 @@ public class Anime extends TableData{
     public Anime() {
     }
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

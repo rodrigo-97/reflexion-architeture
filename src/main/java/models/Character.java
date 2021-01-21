@@ -9,8 +9,8 @@ import java.util.ArrayList;
 @Table(name = "character")
 public class Character extends TableData{
 
-    @FieldTable(columnName = "id", isPk = true)
-    private Integer id;
+    @FieldTable(columnName = "id")
+    private String id;
 
     @FieldTable(columnName = "name")
     private String name;
@@ -18,21 +18,21 @@ public class Character extends TableData{
     @FieldTable(columnName = "age")
     private Integer age;
 
-    @FieldTable(columnName = "anime_id", isFk = true)
+    @FieldTable(columnName = "anime_id")
     private Integer animeId;
 
     /* Methods */
     public Character() {
     }
 
-    public Integer getId() {
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }

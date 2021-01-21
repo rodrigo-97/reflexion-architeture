@@ -1,0 +1,32 @@
+create table anime (
+	id serial,
+	name varchar (256),
+	num_episodes integer,
+
+	primary key (id)
+);
+
+
+create table "character" (
+	id serial,
+	name varchar (235),
+	age integer,
+	anime_id integer,
+
+	primary key (id),
+	foreign key (anime_id) references anime (id) on delete cascade
+)
+
+
+select * from anime
+select * from character
+drop table anime, "character"
+
+insert into anime (id, name, num_episodes) values (default, '2232', 12)
+INSERT INTO character (id,name,age, anime_id)  VALUES (default, 'lalala', 24, 1)
+
+
+
+
+delete from character where id = 7
+delete from anime where id = 1

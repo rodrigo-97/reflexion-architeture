@@ -28,12 +28,11 @@ public class AnimeResource extends HttpServlet {
             ConfigCors.setAccessControlHeaders(response);
             PrintWriter out = response.getWriter();
 
-            out.println(new Gson().toJson(new PersistData(new Anime()).getData()));
+            out.println(new AnimeController().getAll());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     protected void doPost (HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -45,7 +44,7 @@ public class AnimeResource extends HttpServlet {
             ReflectionTable.setValueField(anime, "numEpisodes", Integer.parseInt(request.getParameter("numEpisodes")));
 
             System.out.println(anime);
-            new PersistData(anime).insert();
+            new AnimeController().insert(anime);
             out.println(new Gson().toJson(new Response("Deu tudo certo")));
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,8 +60,8 @@ public class AnimeResource extends HttpServlet {
             ReflectionTable.setValueField(anime, "id", Integer.parseInt(request.getParameter("id")));
             ReflectionTable.setValueField(anime, "name", request.getParameter("name"));
             ReflectionTable.setValueField(anime, "numEpisodes", Integer.parseInt(request.getParameter("numEpisodes")));
-            System.out.println("put");
-            out.println("ok");
+
+            new AnimeController().update(anime);
             System.out.println(anime);
         } catch (IOException e) {
             e.printStackTrace();

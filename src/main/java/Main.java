@@ -19,7 +19,7 @@ public class Main {
 
         anime.setNumEpisodes(23);
         anime.setName("alalala");
-        anime.setId(1);
+        anime.setId("1");
 
         System.out.println("--- Anime data ---");
         System.out.println(anime.getTableName());

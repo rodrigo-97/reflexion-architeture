@@ -83,6 +83,7 @@ public class SQLGenerator {
         return "INSERT INTO "+tableData.getTableName() + " (" + this.columnsSyntax() +")  VALUES ( "+ this.valuesForInsert()+ ")";
     }
 
+
     private String whereSyntax() {
         boolean fillValues = true;
         String where= " WHERE 1=1 " ;
