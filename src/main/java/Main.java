@@ -46,7 +46,6 @@ public class Main {
         Anime anime2 = new Anime();
         psd = new PersistData(anime2);
         System.out.println(psd.getData());
-        psd.insert();
         List<TableData> animes =  psd.getData();
         System.out.println(animes.get(0).toString());
     }

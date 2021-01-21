@@ -30,11 +30,7 @@ public class PersistData {
             System.out.println(pst);
             rs = pst.executeQuery();
             while (rs.next()){
-                if(pst.getParameterMetaData().getParameterCount() >= 1){
-                    tablesData.add(this.getResultSetData(rs,this.sqlGenerator.generateHashMap()));
-                }else{
-                    tablesData.add(this.getResultSetData(rs,this.sqlGenerator.generateHashMap(true)));
-                }
+                tablesData.add(this.getResultSetData(rs,this.sqlGenerator.generateHashMap()));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

@@ -40,16 +40,17 @@ public class SQLGenerator {
                 this.nameValue.put(name,ReflectionTable.getFieldValue(this.tableData,name));
         }
 
-        return  this.nameValue;
-    }
-
-    public HashMap<String,Object> generateHashMap(boolean ignoreNullValues){
-        Integer index = 0;
-
-        for(String name: this.atributesNames){
-            Object value = ReflectionTable.getFieldValue(this.tableData,name);
-                this.nameValue.put(name,ReflectionTable.getFieldValue(this.tableData,name));
+        if(nameValue.size() < 1 ){
+            for(String name: this.atributesNames){
+                Object value = ReflectionTable.getFieldValue(this.tableData,name);
+                    this.nameValue.put(name,ReflectionTable.getFieldValue(this.tableData,name));
+            }
+            for(String name: this.pkNames){
+                Object value = ReflectionTable.getFieldValue(this.tableData,name);
+                    this.nameValue.put(name,ReflectionTable.getFieldValue(this.tableData,name));
+            }
         }
+
         return  this.nameValue;
     }
 
@@ -88,7 +89,7 @@ public class SQLGenerator {
         if (this.nameValue != null){
             if(this.nameValue.size()  >= 1) {
                 for(Map.Entry<String,Object> entry: this.nameValue.entrySet()) {
-                    if(entry.getKey() != null && entry.getKey() != ""){
+                    if(entry.getValue() != null && entry.getValue() != ""){
                         where+=" AND " + entry.getKey()  + "="  + "?" ;
                     }else{
                         System.out.println("Não há valor a ser preenchido");
@@ -107,18 +108,9 @@ public class SQLGenerator {
           if(name != null && name != "")
               fields.add(name);
         }
-        String columns = "";
-        if(!this.needPk && pkNames.size() > 1) {
-            for(String pk: this.pkNames ){
-                    fields.remove(fields.indexOf(pk));
-            }
-        }
 
-        if(fields.size() < 1){
-            for(String fied: tableData.getFields()){
-                fields.add(fied);
-            }
-        }
+        String columns = "";
+
         columns+= String.join(",",fields);
         return 	columns;
     }
