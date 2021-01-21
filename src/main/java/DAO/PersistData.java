@@ -20,7 +20,7 @@ public class PersistData {
         sqlGenerator = new SQLGenerator(tableData);
     }
 
-    public List<TableData> getData(){
+    public List<TableData>  getData(){
         String sql = this.sqlGenerator.selectStatement();
         ResultSet rs;
         List<TableData> tablesData = new ArrayList<>();
@@ -29,6 +29,7 @@ public class PersistData {
             pst = this.statementFill(pst,this.sqlGenerator.generateHashMap());
             System.out.println(pst);
             rs = pst.executeQuery();
+            System.out.println(pst.getFetchSize());
             while (rs.next()){
                 tablesData.add(this.getResultSetData(rs,this.sqlGenerator.generateHashMap()));
             }
@@ -57,36 +58,37 @@ public class PersistData {
         return isSuccess;
     }
 
+    public boolean update(){
+        String sql = this.sqlGenerator.updateStatement();
+        boolean isSuccess = false ;
+        List<TableData> tablesData = new ArrayList<>();
+        try {
+            pst = con.prepareStatement(sql);
+            pst = this.statementFill(pst,this.sqlGenerator.generateHashMap());
+            System.out.println(pst);
+            if(pst.executeUpdate() >= 1){
+                isSuccess = true ;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return isSuccess;
+    }
+
     private PreparedStatement statementFill(PreparedStatement pst, HashMap<String,Object> data){
         boolean typeFound = false;
         int colIndex = 1;
-        for(Map.Entry<String, Object> entry: data.entrySet()){
+        for(Map.Entry<String, Object> entry: data.entrySet()) {
             try {
-            if(entry.getValue() instanceof String){
-                pst.setString(colIndex,(String) entry.getValue());
-                typeFound = true;
-            }else if(entry.getValue() instanceof Integer){
-                pst.setInt(colIndex,(Integer) entry.getValue());
-                typeFound = true;
-            }else if(entry.getValue() instanceof Date){
-                pst.setDate(colIndex, (java.sql.Date) entry.getValue());
-                typeFound = true;
-            }else if(entry.getValue() instanceof Float){
-                pst.setFloat(colIndex,(Float)entry.getValue());
-                typeFound = true;
-            }else if(entry.getValue() instanceof Boolean){
-                pst.setBoolean(colIndex,(Boolean)entry.getValue());
-                typeFound = true;
-            }else if(entry.getValue() instanceof Time){
-                pst.setTime(colIndex,(Time)entry.getValue());
-                typeFound = true;
-            } else {
-                System.out.println("Tipo para este dado não declarado:"+entry.getKey());
-            }
+                if(entry.getValue() != null && entry.getValue() != ""){
+                    pst.setObject(colIndex, entry.getValue());
+                    colIndex++;
+                }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-            colIndex++;
+
         }
 
 

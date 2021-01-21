@@ -27,11 +27,13 @@ public class SQLGenerator {
 
     public HashMap<String,Object> generateHashMap(){
         Integer index = 0;
-
+        boolean onlyIdFullField = true;
         for(String name: this.atributesNames){
             Object value = ReflectionTable.getFieldValue(this.tableData,name);
-            if(ReflectionTable.getFieldValue(this.tableData,name) != null && ReflectionTable.getFieldValue(this.tableData,name) != "")
-            this.nameValue.put(name,ReflectionTable.getFieldValue(this.tableData,name));
+            if(ReflectionTable.getFieldValue(this.tableData,name) != null && ReflectionTable.getFieldValue(this.tableData,name) != ""){
+                this.nameValue.put(name,ReflectionTable.getFieldValue(this.tableData,name));
+                onlyIdFullField =  false;
+            }
         }
 
         for(String name: this.pkNames){
@@ -40,7 +42,7 @@ public class SQLGenerator {
                 this.nameValue.put(name,ReflectionTable.getFieldValue(this.tableData,name));
         }
 
-        if(nameValue.size() < 1 ){
+        if(nameValue.size() < 1  || onlyIdFullField ){
             for(String name: this.atributesNames){
                 Object value = ReflectionTable.getFieldValue(this.tableData,name);
                     this.nameValue.put(name,ReflectionTable.getFieldValue(this.tableData,name));
@@ -54,13 +56,10 @@ public class SQLGenerator {
         return  this.nameValue;
     }
 
-
-    public String  selectAllStatement(){
-        return "SELECT "+this.columnsSyntax()+" FROM "+this.tableName;
-    }
-
     public String  selectStatement(){
-        return "SELECT "+this.columnsSyntax()+" FROM "+this.tableName +" "+this.whereSyntax();
+        String columns = this.columnsSyntax() ;
+        String where = this.whereSyntax();
+        return "SELECT "+columns+" FROM "+this.tableName +" "+where;
     }
 
     public String  updateStatement(){
@@ -85,9 +84,17 @@ public class SQLGenerator {
     }
 
     private String whereSyntax() {
+        boolean fillValues = true;
         String where= " WHERE 1=1 " ;
         if (this.nameValue != null){
             if(this.nameValue.size()  >= 1) {
+                for(String pk:this.pkNames )
+                    if(ReflectionTable.getFieldValue(tableData, pk) != null && ReflectionTable.getFieldValue(tableData, pk) != "" ){
+                        nameValue  = new HashMap<>();
+                        nameValue.put(pk,ReflectionTable.getFieldValue(tableData, pk));
+                        return where + " AND " + pk  + "="  + "?";
+                    }
+
                 for(Map.Entry<String,Object> entry: this.nameValue.entrySet()) {
                     if(entry.getValue() != null && entry.getValue() != ""){
                         where+=" AND " + entry.getKey()  + "="  + "?" ;
@@ -125,15 +132,25 @@ public class SQLGenerator {
     }
 
     private String updateSintaxe() {
-        String updateSets = " ";
+        String updateSets = "SET ";
+        int index = 0;
         for(Map.Entry<String,Object> entry: this.nameValue.entrySet()) {
-            if(entry.getValue() instanceof Number)
-                updateSets+=entry.getKey() +" = "+entry.getValue().toString()+ ", ";
-            else
-                updateSets+=entry.getKey() +" = '"+entry.getValue().toString()+ "', ";
+            boolean fieldIsPk = false;
+            for(String pk: pkNames ){
+                if(entry.getKey() == pk){
+                    this.nameValue.remove(pk);
+                    fieldIsPk = true;
+                }
+            }
+            if (!fieldIsPk)
+                updateSets+= entry.getKey() +" = ?";
+
+            index++;
+            if (index < nameValue.size())
+                updateSets+=",";
         }
 
-        return updateSets;
+        return updateSets.substring(0,updateSets.lastIndexOf(","));
     }
 
 
