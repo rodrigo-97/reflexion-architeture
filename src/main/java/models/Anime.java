@@ -20,6 +20,13 @@ public class Anime extends TableData{
     private Integer numEpisodes;
 
     /* Methods */
+
+    public Anime(Integer id, String name, Integer numEpisodes) {
+        this.id = id;
+        this.name = name;
+        this.numEpisodes = numEpisodes;
+    }
+
     public Anime() {
     }
 

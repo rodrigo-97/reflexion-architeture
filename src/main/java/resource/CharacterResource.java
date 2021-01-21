@@ -1,8 +1,11 @@
 package resource;
 
+import DAO.PersistData;
 import com.google.gson.Gson;
+import models.Anime;
 import models.Character;
 import reflection.ReflectionTable;
+import utils.ConfigCors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,26 +16,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-// TODO: 10/01/2021 Fazer neste pacote a parte da api onde o cliente irá se conectar
 @WebServlet(name = "character", value = "/characters")
 public class CharacterResource extends HttpServlet {
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        // find animes
-        // animeController.findAll();
-
         try {
-            // check if id were passed in URI path
-            String requestParam;
-            String responseContent;
-            requestParam = request.getParameter("id");
-            if(requestParam == null){
-                // find all anime data
-                //responseContent = "Não há nada aqui";
-            }else {
-                // find anime by pk
-                //responseContent = "Há algo aqui " + requestParam;
-            }
-        } catch (Exception e) {
+            ConfigCors.setAccessControlHeaders(response);
+            PrintWriter out = response.getWriter();
+
+            out.println(new Gson().toJson(new PersistData(new Character()).getData()));
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

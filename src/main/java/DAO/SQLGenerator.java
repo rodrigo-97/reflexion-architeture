@@ -80,7 +80,7 @@ public class SQLGenerator {
             fieldValues.add(ReflectionTable.getFieldValue(tableData, fieldName));
         }
 
-        return "INSERT INTO "+tableData.getTableName() + " " + this.columnsSyntax() +" VALUES ( "+ this.valuesForInsert()+ ")";
+        return "INSERT INTO "+tableData.getTableName() + " (" + this.columnsSyntax() +")  VALUES ( "+ this.valuesForInsert()+ ")";
     }
 
     private String whereSyntax() {

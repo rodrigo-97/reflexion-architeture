@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public final class Conn  {
     public static Connection Con;
     private static Connection Conn() throws ClassNotFoundException {
-        String url = "jdbc:postgresql://172.20.0.2:5432/prog4";//jdbc:"driver"://"url_do_banco":"porta"/"nome_base_dados"
+        String url = "jdbc:postgresql://localhost:5432/prog4";//jdbc:"driver"://"url_do_banco":"porta"/"nome_base_dados"
         String user = "postgres";
         String password = "postgres";
         try {
@@ -19,7 +19,6 @@ public final class Conn  {
             sqlException.printStackTrace();
         }
         return Con;
-
     }
 
     public static Connection getInstance(){

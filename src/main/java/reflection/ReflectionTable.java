@@ -74,6 +74,7 @@ public class ReflectionTable {
     /*
     ** This part will get the type of attributes from table [pk, fk, normal attribute]
      */
+    // TODO: 20/01/2021 remover  
     public static ArrayList<String> getTypeFields (Object table) {
         ArrayList<String> typeFields = new ArrayList<>();
 
