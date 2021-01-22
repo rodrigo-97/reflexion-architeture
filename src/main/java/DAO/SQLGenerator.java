@@ -71,14 +71,6 @@ public class SQLGenerator {
     }
 
     public String insertStatement(){
-        this.needPk = false;
-        List<String> fieldNames =  this.tableData.getFields();
-        List<Object> fieldValues =  new ArrayList<>();
-
-        for(String fieldName: fieldNames){
-            fieldName = StringUtils.removeUnderscore(fieldName);
-            fieldValues.add(ReflectionTable.getFieldValue(tableData, fieldName));
-        }
 
         return "INSERT INTO "+tableData.getTableName() + " (" + this.columnsSyntax() +")  VALUES ( "+ this.valuesForInsert()+ ")";
     }
@@ -89,13 +81,6 @@ public class SQLGenerator {
         String where= " WHERE 1=1 " ;
         if (this.nameValue != null){
             if(this.nameValue.size()  >= 1) {
-                for(String pk:this.pkNames )
-                    if(ReflectionTable.getFieldValue(tableData, pk) != null && ReflectionTable.getFieldValue(tableData, pk) != "" ){
-                        nameValue  = new HashMap<>();
-                        nameValue.put(pk,ReflectionTable.getFieldValue(tableData, pk));
-                        return where + " AND " + pk  + "="  + "?";
-                    }
-
                 for(Map.Entry<String,Object> entry: this.nameValue.entrySet()) {
                     if(entry.getValue() != null && entry.getValue() != ""){
                         where+=" AND " + entry.getKey()  + "="  + "?" ;
@@ -112,9 +97,10 @@ public class SQLGenerator {
     private String columnsSyntax(){
         //Alinha o nome dos campos da Sql. (coluna1, coluna2,)
         List<String> fields = new ArrayList<>();
-        for(String name :this.nameValue.keySet() ){
-          if(name != null && name != "")
-              fields.add(name);
+        for(Map.Entry<String,Object> entry :this.nameValue.entrySet() ){
+          if(entry.getKey() != null && entry.getKey()!= "" ){
+              fields.add(entry.getKey());
+          }
         }
 
         String columns = "";
@@ -132,26 +118,14 @@ public class SQLGenerator {
         return String.join(",",convertedValues);
     }
 
-    private String updateSintaxe() {
-        String updateSets = "SET ";
+    private String updateSintaxe(){
+        List<String> fields = new ArrayList<>();
         int index = 0;
         for(Map.Entry<String,Object> entry: this.nameValue.entrySet()) {
-            boolean fieldIsPk = false;
-            for(String pk: pkNames ){
-                if(entry.getKey() == pk){
-                    this.nameValue.remove(pk);
-                    fieldIsPk = true;
-                }
-            }
-            if (!fieldIsPk)
-                updateSets+= entry.getKey() +" = ?";
+                fields.add(entry.getKey()+"="+"?");
 
-            index++;
-            if (index < nameValue.size())
-                updateSets+=",";
         }
-
-        return updateSets.substring(0,updateSets.lastIndexOf(","));
+        return "SET "+String.join(", ",fields);
     }
 
 

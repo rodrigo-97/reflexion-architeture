@@ -19,7 +19,7 @@ public class Main {
 
         anime.setNumEpisodes(23);
         anime.setName("alalala");
-        anime.setId("1");
+        anime.setId(1);
 
         System.out.println("--- Anime data ---");
         System.out.println(anime.getTableName());
@@ -37,19 +37,27 @@ public class Main {
         System.out.println(character.getTypeFields());
 
         System.out.println(animeController.getAll());
-
-        System.out.println(ReflectionTable.getFieldValue(anime,"name"));
-
+        System.out.println("_______________________");
         PersistData psd = null;
         ReflectionTable.setValueField(anime,"name","");
         ReflectionTable.setValueField(anime,"numEpisodes",null);
         Anime anime2 = new Anime();
-        psd = new PersistData(anime2);
         // System.out.println(psd.getData());
-       List<TableData> animes =  psd.getData();
+        psd =  new PersistData(anime2);
+        ReflectionTable.setValueField(anime2,"id",null);
+        ReflectionTable.setValueField(anime2,"name","danganronpa");
+        ReflectionTable.setValueField(anime2,"numEpisodes",20);
+        psd =  new PersistData(anime2);
+        System.out.println(anime2);
+        psd.insert();
+        System.out.println(psd.getData());
         ReflectionTable.setValueField(anime2,"id",1);
+        ReflectionTable.setValueField(anime2,"name","some nome");
+        ReflectionTable.setValueField(anime2,"numEpisodes",2000);
         psd =  new PersistData(anime2);
         psd.update();
+        System.out.println(psd.getData());
+        psd.delete();
         System.out.println(psd.getData());
     }
 }

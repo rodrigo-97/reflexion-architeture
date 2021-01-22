@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Anime extends TableData{
 
     @FieldTable(columnName = "id")
-    private String id;
+    private Integer id;
 
     @FieldTable(columnName = "name")
     private String name;
@@ -21,15 +21,15 @@ public class Anime extends TableData{
 
     /* Methods */
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Anime(String id, String name, Integer numEpisodes) {
+    public Anime(Integer id, String name, Integer numEpisodes) {
         this.id = id;
         this.name = name;
         this.numEpisodes = numEpisodes;

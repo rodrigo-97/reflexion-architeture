@@ -58,6 +58,24 @@ public class PersistData {
         return isSuccess;
     }
 
+    public boolean delete(){
+        String sql = this.sqlGenerator.deleteStatement();
+        boolean isSuccess = false ;
+        List<TableData> tablesData = new ArrayList<>();
+        try {
+            pst = con.prepareStatement(sql);
+            pst = this.statementFill(pst,this.sqlGenerator.generateHashMap());
+            System.out.println(pst);
+            if(pst.executeUpdate() > 1){
+                isSuccess = true ;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return isSuccess;
+    }
+
     public boolean update(){
         String sql = this.sqlGenerator.updateStatement();
         boolean isSuccess = false ;
@@ -76,9 +94,14 @@ public class PersistData {
         return isSuccess;
     }
 
+
     private PreparedStatement statementFill(PreparedStatement pst, HashMap<String,Object> data){
-        boolean typeFound = false;
         int colIndex = 1;
+        try {
+            System.out.println(pst.getParameterMetaData().getParameterCount()+"<<<<");
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
         for(Map.Entry<String, Object> entry: data.entrySet()) {
             try {
                 if(entry.getValue() != null && entry.getValue() != ""){
@@ -97,7 +120,6 @@ public class PersistData {
 
     private TableData getResultSetData(ResultSet rs,HashMap<String,Object> data){
         //@TODO tratar os demais valores
-        boolean typeFound = false;
         int colIndex = 1;
         TableData tableData = null;
         try {
@@ -118,22 +140,16 @@ public class PersistData {
             try {
                 if(ReflectionTable.getTypeField(tableData,entry.getKey()).equals(String.class)){
                      ReflectionTable.setValueField(tableData,entry.getKey(),rs.getString(colIndex));
-                    typeFound = true;
                 }else if(ReflectionTable.getTypeField(tableData,entry.getKey()).equals(Integer.class)){
                     ReflectionTable.setValueField(tableData,entry.getKey(),rs.getInt(colIndex));
-                    typeFound = true;
                 }else if(entry.getValue() instanceof Date){
                     ReflectionTable.setValueField(tableData,entry.getKey(),rs.getDate(colIndex));
-                    typeFound = true;
                 }else if(entry.getValue() instanceof Float){
                     ReflectionTable.setValueField(tableData,entry.getKey(),rs.getFloat(colIndex));
-                    typeFound = true;
                 }else if(entry.getValue() instanceof Boolean){
                     ReflectionTable.setValueField(tableData,entry.getKey(),rs.getBoolean(colIndex));
-                    typeFound = true;
                 }else if(entry.getValue() instanceof Time){
                     ReflectionTable.setValueField(tableData,entry.getKey(),rs.getTime(colIndex));
-                    typeFound = true;
                 } else {
                     System.out.println("Tipo para este dado não declarado(Obter dados)"+entry.getKey());
                 }
